@@ -13,7 +13,7 @@
 
     <properties>
         <!-- Project -->
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -24,10 +24,6 @@
         <!-- 3rd party -->
         <lombok.version>1.18.24</lombok.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
-        <joda-time.version>2.13.3</joda-time.version>
-        <jadira.version>6.0.1.GA</jadira.version>
-        <sun.jaxb.version>4.0.0</sun.jaxb.version>
-        <javax.jaxb.version>2.3.1</javax.jaxb.version>
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
 
         <!-- Test -->
@@ -73,42 +69,6 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-joda</artifactId>
-                <version>${joda-time.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>jaxb-runtime</artifactId>
-                <version>2.3.2</version>
-            </dependency>
-
-            <dependency>
-                <groupId>jakarta.xml.bind</groupId>
-                <artifactId>jakarta.xml.bind-api</artifactId>
-                <version>${sun.jaxb.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>${sun.jaxb.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-core</artifactId>
-                <version>${sun.jaxb.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${javax.jaxb.version}</version>
             </dependency>
 
             <dependency>
@@ -282,7 +242,7 @@
 
                 <quarkus.native.native-image-xmx>4096m</quarkus.native.native-image-xmx>
 
-                <quarkus.native.builder-image>goafabric/quarkus-build-aarch64:ol7-java11-22.2.0</quarkus.native.builder-image>
+                <quarkus.native.builder-image>goafabric/quarkus-native-image-arm64v8:22.2-java17</quarkus.native.builder-image>
                 <quarkus.jib.base-native-image>registry.access.redhat.com/ubi8/ubi-minimal:8.5</quarkus.jib.base-native-image>
 
                 <quarkus.jib.platforms>linux/arm64/v8</quarkus.jib.platforms>
