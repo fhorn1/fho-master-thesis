@@ -1,0 +1,17 @@
+Maybe delete following line in file sdops_root_VX.XX.xsd:
+
+  <xs:element name="opscode_liste">
+ 		<xs:complexType>
+ 			<xs:sequence>
+ 				<xs:element ref="sdops:opscode" maxOccurs="unbounded"/>
+ 			</xs:sequence>
+ 		</xs:complexType>
+ 	</xs:element>
+
+and change
+
+<xs:element ref="opscode_liste"/>
+
+to
+
+<xs:element ref="sdops:opscode_liste"/>

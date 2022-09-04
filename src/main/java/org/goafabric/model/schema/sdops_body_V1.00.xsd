@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Mit XMLSpy v2017 rel. 3 sp1 (x64) (http://www.altova.com) von Kassenärztliuche Bundesvereinigung (Kassenärztliche Bundesvereinigung) bearbeitet -->
+<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by LBuchheim (Kassenärztliche Bundesvereinigung) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by KBV (KBV) -->
+<!-- History
+* 05.10.2010 neue Schnittstelle zur Ablösung der Datenarten 53X und 54X
+*  -->
+<xs:schema xmlns:sciphox="urn::sciphox-org/sciphox" xmlns:ehdtl="urn:ehd/001" xmlns="urn:ehd/sdops/001" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sdops="urn:ehd/sdops/001" targetNamespace="urn:ehd/sdops/001" elementFormDefault="qualified">
+	<xs:import namespace="urn:ehd/001" schemaLocation="datentypen_V1.40.xsd"/>
+	<!-- Schema -->
+	<!-- ======================================================================= 
+	ops-Schnittstelle
+	======================================================================= -->
+	<xs:element name="opscode_liste">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="opscode" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="opscode">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="gueltigkeit">
+					<xs:complexType>
+						<xs:attribute name="V" type="ehdtl:zeitraum_typ" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="kzmedbegruendung" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="V" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="J"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="kzseite">
+					<xs:complexType>
+						<xs:attribute name="V" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:length value="1"/>
+									<xs:pattern value="J"/>
+									<xs:pattern value="N"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="kz115b" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="V" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="1"/>
+									<xs:pattern value="2"/>
+									<xs:pattern value="s"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="kz115b_info" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="V" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="V" use="required"/>
+			<xs:attribute name="DN" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
