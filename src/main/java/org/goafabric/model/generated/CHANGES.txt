@@ -1,0 +1,25 @@
+Change EhdBodyType.java
+
+1.
+@XmlAnyElement
+protected List<Element> any;
+
+to
+@XmlAnyElement(lax = true)
+protected List<OpscodeListe> any;
+
+2.
+public List<Element> getAny() {
+    if (any == null) {
+        any = new ArrayList<Element>();
+    }
+    return this.any;
+}
+
+to
+public List<OpscodeListe> getAny() {
+    if (any == null) {
+        any = new ArrayList<OpscodeListe>();
+    }
+    return this.any;
+}

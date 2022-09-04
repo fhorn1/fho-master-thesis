@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ======================================================================= 
+ehd-Schnittstelle "eHealthData"
+Die Hauptintention von ehd ist es, einen Rahmen zu schaffen, in dem beliebige XML-Schnittstellen 
+entstehen können, für die der CDA-Header von SCIPHOX ungeeignet ist. Dabei wird Wert darauf 
+gelegt, weitgehend kompatibel zu SCIPHOX zu sein: Von begründeten Ausnahmen abgesehen, 
+werden für alle ehd-Schnittstellen die Elemente aus SCIPHOX übernommen. 
+
+Namensraum ist:  urn:ehd/001
+
+Damit Elementnamen nicht umdefiniert werden können, ist blockDefault="substitution" gesetzt.
+Bei Ableitung von neuen Schnittstellen, ist dieses Attribut (blockDefault) auch zu setzen.
+Die Version der Schnittstelle ist im version-Attribut hinterlegt.
+
+version="1.40"
+=======================================================================-->
+<xs:schema xmlns="urn:ehd/001" xmlns:ehd="urn:ehd/001" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ehd/001" elementFormDefault="qualified" attributeFormDefault="unqualified" blockDefault="substitution" version="1.40">
+	<!-- ======================================================================= 
+	ehd_Dateien einbinden
+	======================================================================= -->
+	<xs:include schemaLocation="ehd_header_V1.40.xsd"/>
+	<xs:include schemaLocation="keytabs_V1.40.xsd"/>
+	<!-- ======================================================================= 
+	ehd_root_typ
+	======================================================================= -->
+	<xs:complexType name="ehd_root_typ">
+		<xs:sequence>
+			<xs:element name="header" type="ehd_header_typ">
+				<xs:annotation>
+					<xs:documentation>alle Metainformationen zu den Daten</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="body" type="ehd_body_typ">
+				<xs:annotation>
+					<xs:documentation>die eigentlichen Daten</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="keytabs" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="ehd_version" type="ehd_version_typ" use="required"/>
+	</xs:complexType>
+	<!--
+	============================================================
+	Versionierung der Schema:
+	im Schema-Attribut "version" steht immer die aktuelle Versionsnummer.
+	Im Pflichtattribut "ehd_version" wird im XML-Dokument die EHD-Version 
+	angegebenen, mit der das Dokument erstellt wurde. Ein bestimmter Wert wird 
+	hier bewußt nicht vorgegeben, damit bei geringfügigen Änderungen, noch 
+	Aufwärtskompatibilität gewährleistet werden kann.
+	============================================================-->
+	<xs:simpleType name="ehd_version_typ">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d?\d\.\d\d"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--
+	============================================================
+	ehd_body_typ,  hier können die Schnittstellenspezifischen Elemente u. Attribute
+	definiert werden. Wenn der Parser die neuen Elemente nicht kennt, wird
+	keine Fehlermeldung ausgegeben. Wenn die Elementdefinition jedoch vorhanden
+	ist, aber die Struktur in der XML-Instance nicht eingehalten wird, meldet
+	der Parser einen Fehler.
+	============================================================
+	-->
+	<xs:complexType name="ehd_body_typ">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>
+</xs:schema>
