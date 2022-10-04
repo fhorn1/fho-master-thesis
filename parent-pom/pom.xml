@@ -28,6 +28,7 @@
         <jadira.version>6.0.1.GA</jadira.version>
         <sun.jaxb.version>4.0.0</sun.jaxb.version>
         <javax.jaxb.version>2.3.1</javax.jaxb.version>
+        <camel.jaxb.version>2.12.0</camel.jaxb.version>
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
 
         <!-- Test -->
@@ -84,7 +85,7 @@
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-runtime</artifactId>
-                <version>2.3.2</version>
+                <version>4.0.0</version>
             </dependency>
 
             <dependency>
@@ -94,21 +95,33 @@
             </dependency>
 
             <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>2.1.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <version>${sun.jaxb.version}</version>
+                <version>2.3.1</version>
             </dependency>
 
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-core</artifactId>
-                <version>${sun.jaxb.version}</version>
+                <version>2.3.0.1</version>
             </dependency>
 
             <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
                 <version>${javax.jaxb.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.camel.quarkus</groupId>
+                <artifactId>camel-quarkus-jaxb</artifactId>
+                <version>${camel.jaxb.version}</version>
             </dependency>
 
             <dependency>
@@ -181,7 +194,7 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <!--<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
                         <maven.home>${maven.home}</maven.home>
                     </systemPropertyVariables>
                 </configuration>
@@ -197,7 +210,7 @@
                         </goals>
                         <configuration>
                             <systemPropertyVariables>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                <!--<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
                                 <maven.home>${maven.home}</maven.home>
                             </systemPropertyVariables>
                         </configuration>
@@ -218,6 +231,7 @@
                 <quarkus.container-image.image>${docker.registry}/${project.artifactId}:${project.version}</quarkus.container-image.image>
 
                 <quarkus.native.native-image-xmx>4096m</quarkus.native.native-image-xmx>
+                <quarkus.native.add-all-charsets>true</quarkus.native.add-all-charsets>
 
                 <!--<quarkus.native.builder-image>quay.io/quarkus/ubi-quarkus-native-image:22.1-java17</quarkus.native.builder-image> -->
                 <quarkus.jib.base-native-image>registry.access.redhat.com/ubi8/ubi-minimal:8.5</quarkus.jib.base-native-image>
@@ -239,7 +253,7 @@
                                         <native.image.path>
                                             ${project.build.directory}/${project.build.finalName}-runner
                                         </native.image.path>
-                                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                        <!--<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
                                         <maven.home>${maven.home}</maven.home>
                                     </systemPropertyVariables>
                                 </configuration>
@@ -281,6 +295,7 @@
                 <quarkus.container-image.image>${docker.registry}/${project.artifactId}-arm64v8:${project.version}</quarkus.container-image.image>
 
                 <quarkus.native.native-image-xmx>4096m</quarkus.native.native-image-xmx>
+                <quarkus.native.add-all-charsets>true</quarkus.native.add-all-charsets>
 
                 <quarkus.native.builder-image>goafabric/quarkus-build-aarch64:ol7-java11-22.2.0</quarkus.native.builder-image>
                 <quarkus.jib.base-native-image>registry.access.redhat.com/ubi8/ubi-minimal:8.5</quarkus.jib.base-native-image>
@@ -304,7 +319,7 @@
                                         <native.image.path>
                                             ${project.build.directory}/${project.build.finalName}-runner
                                         </native.image.path>
-                                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                        <!--<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
                                         <maven.home>${maven.home}</maven.home>
                                     </systemPropertyVariables>
                                 </configuration>

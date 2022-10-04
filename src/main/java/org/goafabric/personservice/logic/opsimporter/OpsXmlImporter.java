@@ -1,18 +1,17 @@
 package org.goafabric.personservice.logic.opsimporter;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.goafabric.model.OpsImportedTuple;
-import org.goafabric.model.generated.EhdBodyTyp;
-import org.goafabric.model.generated.EhdHeaderTyp;
-import org.goafabric.model.generated.ObjectFactory;
-import org.goafabric.model.generated.OpsRootTyp;
+import org.goafabric.model.generated.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import java.io.FilterInputStream;
 import java.io.InputStream;
 
@@ -34,7 +33,11 @@ public class OpsXmlImporter {
             JAXBContext jc = JAXBContext.newInstance(OpsRootTyp.class, ObjectFactory.class);
 
             Unmarshaller unmarshaller = jc.createUnmarshaller();
-            JAXBElement<OpsRootTyp> rootElement = (JAXBElement) unmarshaller.unmarshal(new JAXBInputStream(inputStream));
+
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLEventReader someSource = factory.createXMLEventReader(inputStream);
+
+            JAXBElement<OpsRootTyp> rootElement = (JAXBElement<OpsRootTyp>) unmarshaller.unmarshal(someSource);
             OpsRootTyp opsRootType = rootElement.getValue();
 
             EhdHeaderTyp header = opsRootType.getHeader();
@@ -44,7 +47,7 @@ public class OpsXmlImporter {
                     .ehdHeaderTyp(header)
                     .ehdBodyTyp(body)
                     .build();
-        } catch (JAXBException e) {
+        } catch (JAXBException | XMLStreamException e) {
             throw new IllegalStateException("Operation code catalog unmarshall has not worked ", e);
         }
     }
@@ -52,7 +55,7 @@ public class OpsXmlImporter {
     // used because JaxB unmarshaller close zip input stream automatically. now close don't do anything
     private class JAXBInputStream extends FilterInputStream {
 
-        JAXBInputStream (InputStream in) {
+        JAXBInputStream(InputStream in) {
             super(in);
         }
 

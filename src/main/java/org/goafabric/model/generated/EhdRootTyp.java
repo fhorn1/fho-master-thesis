@@ -1,13 +1,13 @@
 
 package org.goafabric.model.generated;
 
-import javax.annotation.Generated;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlElement;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
@@ -41,19 +41,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     OpsRootTyp.class
 })
-@Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
 public class EhdRootTyp {
 
     @XmlElement(required = true)
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected EhdHeaderTyp header;
     @XmlElement(required = true)
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected EhdBodyTyp body;
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected KeytabsTyp keytabs;
     @XmlAttribute(name = "ehd_version", required = true)
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected String ehdVersion;
 
     /**
@@ -64,7 +59,6 @@ public class EhdRootTyp {
      *     {@link EhdHeaderTyp }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public EhdHeaderTyp getHeader() {
         return header;
     }
@@ -77,7 +71,6 @@ public class EhdRootTyp {
      *     {@link EhdHeaderTyp }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public void setHeader(EhdHeaderTyp value) {
         this.header = value;
     }
@@ -90,7 +83,6 @@ public class EhdRootTyp {
      *     {@link EhdBodyTyp }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public EhdBodyTyp getBody() {
         return body;
     }
@@ -103,7 +95,6 @@ public class EhdRootTyp {
      *     {@link EhdBodyTyp }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public void setBody(EhdBodyTyp value) {
         this.body = value;
     }
@@ -116,7 +107,6 @@ public class EhdRootTyp {
      *     {@link KeytabsTyp }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public KeytabsTyp getKeytabs() {
         return keytabs;
     }
@@ -129,7 +119,6 @@ public class EhdRootTyp {
      *     {@link KeytabsTyp }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public void setKeytabs(KeytabsTyp value) {
         this.keytabs = value;
     }
@@ -142,7 +131,6 @@ public class EhdRootTyp {
      *     {@link String }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public String getEhdVersion() {
         return ehdVersion;
     }
@@ -155,7 +143,6 @@ public class EhdRootTyp {
      *     {@link String }
      *     
      */
-    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2020-04-17T11:28:17+02:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public void setEhdVersion(String value) {
         this.ehdVersion = value;
     }
