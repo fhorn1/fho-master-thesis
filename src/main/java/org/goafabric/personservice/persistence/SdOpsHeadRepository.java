@@ -18,6 +18,19 @@ import java.util.Optional;
 public class SdOpsHeadRepository implements PanacheRepository<SdOpsHeadEo> {
 
     /**
+     * get {@link SdOpsHeadEo} by {@code id}
+     *
+     * @param id - non null
+     * @return List of {@link SdOpsHeadEo}
+     */
+    public SdOpsHeadEo getById(String id) {
+        return find("id = :id",
+                Parameters.with("id", id)
+                        .map()).firstResult();
+
+    }
+
+    /**
      * get {@link SdOpsHeadEo} by {@code internalVersion}
      *
      * @param internalVersion- non null
