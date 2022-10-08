@@ -45,11 +45,11 @@ public class SdOpsCodeRepository implements PanacheRepository<SdOpsCodeEo> {
     /**
      * Amount of {@link SdOpsCodeEo} for a requested head id.
      *
-     * @param catalogId - non null
+     * @param headId - non null
      */
-    public long countAllByHeadId(String catalogId) {
-        return count("catalogId = :catalogId",
-                Parameters.with("catalogId", catalogId)
+    public long countAllByHeadId(String headId) {
+        return count("headId = :headId",
+                Parameters.with("headId", headId)
                         .map());
     }
 
