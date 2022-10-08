@@ -1,5 +1,6 @@
 package org.goafabric.personservice.service;
 
+import org.goafabric.model.OpsImportStatistics;
 import org.goafabric.personservice.logic.OpsLogic;
 import org.goafabric.personservice.service.dto.OpCode;
 import org.goafabric.personservice.service.dto.OpHead;
@@ -35,8 +36,15 @@ public class OpsService {
 
     @GET
     @Path("getAllOpCodesOfHead")
-    public List<OpCode> getAllOpCodesOfHead(@QueryParam("headId") String headId) {
-        return opsLogic.getAllOpCodesOfHead(headId);
+    public List<OpCode> getAllOpCodesOfHead(@QueryParam("headId") String headId,
+                                            @QueryParam("limit") Integer limit) {
+        return opsLogic.getAllOpCodesOfHead(headId, limit);
+    }
+
+    @GET
+    @Path("getImportStatistics")
+    public OpsImportStatistics getImportStatistics(@QueryParam("headId") String headId) {
+        return opsLogic.getImportStatistics(headId);
     }
 
 }

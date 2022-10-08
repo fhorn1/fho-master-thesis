@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  person-service:
+  ops-service:
     container_name: ${_Values_root_name}-application
     image:  ${_Values_image_repository}${_Values_server_arch}:${_Values_image_tag}
     restart: 'no'
@@ -29,9 +29,9 @@ services:
       - security.encryption.key=203fef90-aead-45ca-830e-ca878bb4e987 #this needs to be changed during first deployment to a unique value
       #persistence
       - quarkus.datasource.db-kind=postgresql
-      - quarkus.datasource.jdbc.url=jdbc:postgresql://${_Values_root_name}-postgres:5432/persondb
-      - quarkus.datasource.username=person-service
-      - quarkus.datasource.password=person-service
+      - quarkus.datasource.jdbc.url=jdbc:postgresql://${_Values_root_name}-postgres:5432/opsdb
+      - quarkus.datasource.username=ops
+      - quarkus.datasource.password=ops
       - quarkus.datasource.jdbc.max-size=10
       - database.provisioning.goals=-import-demo-data
       #adapter
@@ -63,13 +63,12 @@ services:
       - 50811:5432
     environment:
       - TZ=Europe/Berlin
-      - POSTGRES_USER=person-service
-      - POSTGRES_PASSWORD=person-service
-      - POSTGRES_DB=persondb
+      - POSTGRES_USER=ops
+      - POSTGRES_PASSWORD=ops
+      - POSTGRES_DB=opsdb
     command: postgres -c 'shared_buffers=128MB' -c 'max_connections=30' -c 'shared_preload_libraries=pg_stat_statements'
     volumes:
       - /Users/fhorn/docker/master-thesis/quarkus/postgres/psdata:/var/lib/postgresql/data
-#      - ../config/postgres/initdb/00_pg_statements.sql:/docker-entrypoint-initdb.d/00_pg_statements.sql
     networks:
       - ${_Values_root_name}-net
 
@@ -79,5 +78,5 @@ volumes:
     pgdata:
 
 networks:
-  person-service-quarkus-net:
+  ops-service-quarkus-net:
     driver: bridge

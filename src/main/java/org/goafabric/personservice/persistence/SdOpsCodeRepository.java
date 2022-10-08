@@ -2,6 +2,7 @@ package org.goafabric.personservice.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.panache.common.Page;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.runtime.Startup;
 import org.goafabric.personservice.persistence.domain.PersonBo;
@@ -20,10 +21,11 @@ public class SdOpsCodeRepository implements PanacheRepository<SdOpsCodeEo> {
      * @param headId non null
      * @return List of {@link SdOpsCodeEo}
      */
-    public List<SdOpsCodeEo> getByHeadId(String headId) {
+    public List<SdOpsCodeEo> getByHeadId(String headId, Integer limit) {
         return find("headId = :headId",
                 Parameters.with("headId", headId)
-                        .map()).list();
+                        .map())
+                .page(Page.ofSize(limit)).list();
     }
 
     /**

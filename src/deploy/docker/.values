@@ -1,6 +1,6 @@
-_Values_root_name="person-service-quarkus"
+_Values_root_name="ops-service-quarkus"
 
-_Values_image_repository=goafabric/person-service-quarkus
+_Values_image_repository=goafabric/ops-service-quarkus
 _Values_image_tag=2.0.1-SNAPSHOT
 
 _Values_service_port=50801
