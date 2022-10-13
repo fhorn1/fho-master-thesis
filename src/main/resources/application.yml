@@ -31,16 +31,13 @@ spring.security.user.name: "admin"
 spring.security.user.password: "admin"
 
 #persistence
-spring.datasource.url: jdbc:h2:mem:persondb
-#spring.datasource.url: jdbc:postgresql://localhost:5432/postgres
+spring.datasource.url: jdbc:postgresql://localhost:5432/postgres
 spring.datasource.username: postgres
 spring.datasource.password: postgres
 
 spring.datasource.hikari.maximum-pool-size: "10"
 spring.datasource.hikari.connection-timeout: "10000"
 
-spring.sql.init.mode: always
-spring.sql.init.schema-locations: classpath*:db/migration/V1__init.sql
 spring.jpa.hibernate.ddl-auto: none
 
 database.provisioning.goals: -import-demo-data
