@@ -1,46 +1,31 @@
 package org.goafabric.personservice;
 
-import io.quarkus.runtime.Quarkus;
-import io.quarkus.runtime.QuarkusApplication;
-import io.quarkus.runtime.annotations.QuarkusMain;
-import io.quarkus.security.spi.runtime.AuthorizationController;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.goafabric.personservice.persistence.DatabaseProvisioning;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
-import javax.annotation.Priority;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
-import javax.inject.Inject;
-import javax.interceptor.Interceptor;
 
-@QuarkusMain
-@Slf4j
+/**
+ * Created by amautsch on 26.06.2015.
+ */
+
+@SpringBootApplication
 public class Application {
 
-    public static void main(String... args) {
-        Quarkus.run(MyApp.class, args);
+    public static void main(String[] args){
+        SpringApplication.run(Application.class, args);
     }
 
-    public static class MyApp implements QuarkusApplication {
-        @Inject DatabaseProvisioning databaseProvisioning;
-
-        @Override
-        public int run(String... args) throws Exception {
+    @Bean
+    public CommandLineRunner init(ApplicationContext context, DatabaseProvisioning databaseProvisioning) {
+        return args -> {
             databaseProvisioning.run();
-            Quarkus.waitForExit();
-            return 0;
-        }
-    }
+            if ((args.length > 0) && ("-check-integrity".equals(args[0]))) { SpringApplication.exit(context, () -> 0);}
+        };
 
-    @Getter
-    @Alternative
-    @ApplicationScoped
-    @Priority(Interceptor.Priority.LIBRARY_AFTER)
-    static class SecurityConfiguration extends AuthorizationController {
-        @ConfigProperty(name = "security.authentication.enabled", defaultValue = "true")
-        boolean isAuthorizationEnabled;
     }
 
 }

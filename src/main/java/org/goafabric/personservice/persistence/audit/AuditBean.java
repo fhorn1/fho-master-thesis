@@ -2,22 +2,22 @@ package org.goafabric.personservice.persistence.audit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.arc.Unremovable;
-import io.quarkus.security.identity.SecurityIdentity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.goafabric.personservice.crossfunctional.HttpInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.nativex.hint.TypeAccess;
+import org.springframework.nativex.hint.TypeHint;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.UUID;
 
+@Component
 @Slf4j
-@ApplicationScoped
-@Unremovable
 /** A class that audits all registered entities with @EntityListeners and writes the Audit Entries to the database **/
+@TypeHint(types = AuditBean.AuditEvent.class, access = {TypeAccess.DECLARED_CONSTRUCTORS, TypeAccess.PUBLIC_METHODS})
 public class AuditBean {
     private enum DbOperation {
         CREATE, READ, UPDATE, DELETE
@@ -43,11 +43,8 @@ public class AuditBean {
         void insertAudit(AuditEvent auditEvent, Object object);
     }
 
-    @Inject
-    AuditInserter auditInserter;
-
-    @Inject
-    SecurityIdentity securityIdentity;
+    @Autowired
+    private AuditInserter auditInserter;
 
     public void afterRead(Object object, String id) {
         insertAudit(DbOperation.READ, id, object, object);
@@ -69,8 +66,8 @@ public class AuditBean {
         try {
             final AuditEvent auditEvent =
                 createAuditEvent(operation, referenceId, oldObject, newObject);
-            auditInserter.insertAudit(auditEvent, oldObject != null ? oldObject : newObject);
             log.debug("New audit event :\n{}", auditEvent);
+            auditInserter.insertAudit(auditEvent, oldObject != null ? oldObject : newObject);
         } catch (Exception e) {
             log.error("Error during audit:\n{}", e.getMessage(), e);
         }

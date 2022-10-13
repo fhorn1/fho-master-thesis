@@ -1,40 +1,35 @@
 package org.goafabric.personservice.logic;
 
 import lombok.NonNull;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.goafabric.personservice.adapter.CalleeServiceAdapter;
-import org.goafabric.personservice.crossfunctional.DurationLog;
-import org.goafabric.personservice.persistence.domain.PersonBo;
 import org.goafabric.personservice.persistence.PersonRepository;
 import org.goafabric.personservice.service.dto.Person;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.List;
 
-@ApplicationScoped
+@Component
 @Transactional
-@DurationLog
 public class PersonLogic {
-    @Inject
+    @Autowired
     PersonMapper personMapper;
 
-    @Inject
+    @Autowired
     PersonRepository personRepository;
 
-    @Inject
-    @RestClient
+    @Autowired
     CalleeServiceAdapter calleeServiceAdapter;
 
-    public Person getById(String id) {
+    public Person getById(@NonNull String id) {
         return personMapper.map(
-                (PersonBo) personRepository.findById(id).firstResult());
+                personRepository.findById(id).get());
     }
 
     public List<Person> findAll() {
         return personMapper.map(
-                personRepository.findAll().list());
+                personRepository.findAll());
     }
 
     public List<Person> findByFirstName(@NonNull String firstName) {
@@ -47,13 +42,9 @@ public class PersonLogic {
                 personRepository.findByLastName(lastName));
     }
 
-    public long countByLastName(@NonNull String lastName) {
-        return personRepository.countByLastName(lastName);
-    }
-
     public Person save(@NonNull Person person) {
-        return personMapper.map(
-                personRepository.save(personMapper.map(person)));
+        return personMapper.map(personRepository.save(
+                personMapper.map(person)));
     }
 
     public Person sayMyName(@NonNull String name) {

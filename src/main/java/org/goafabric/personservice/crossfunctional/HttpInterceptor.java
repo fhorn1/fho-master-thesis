@@ -1,20 +1,22 @@
 package org.goafabric.personservice.crossfunctional;
 
-import io.quarkus.security.identity.SecurityIdentity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.inject.Inject;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.ext.Provider;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+@Configuration
 @Slf4j
-@Provider
-public class HttpInterceptor implements ContainerRequestFilter, ContainerResponseFilter {
-    @Inject SecurityIdentity securityIdentity;
+public class HttpInterceptor implements WebMvcConfigurer {
     private static final ThreadLocal<String> tenantId = new ThreadLocal<>();
     private static final ThreadLocal<String> userName = new ThreadLocal<>();
 
@@ -23,16 +25,30 @@ public class HttpInterceptor implements ContainerRequestFilter, ContainerRespons
     public static void   setTenantId(String tenantId) { HttpInterceptor.tenantId.set(tenantId); }
 
     @Override
-    public void filter(ContainerRequestContext request) throws IOException {
-        tenantId.set(request.getHeaderString("X-TenantId") != null ? request.getHeaderString("X-TenantId") : "0"); //TODO
-        userName.set(request.getHeaderString("X-Auth-Request-Preferred-Username") != null ? request.getHeaderString("X-Auth-Request-Preferred-Username")
-                :  securityIdentity.getPrincipal().getName());
-    }
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HandlerInterceptor() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+                tenantId.set(request.getHeader("X-TenantId") != null ? request.getHeader("X-TenantId") : "0"); //TODO
+                userName.set(request.getHeader("X-Auth-Request-Preferred-Username") != null ? request.getHeader("X-Auth-Request-Preferred-Username")
+                                                :  SecurityContextHolder.getContext().getAuthentication().getName());
+                return true;
+            }
 
-    @Override
-    public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) throws IOException {
-        tenantId.remove();
-        userName.remove();
+            @Override
+            public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+                tenantId.remove();
+                userName.remove();
+            }
+        });
     }
+    @Value("${security.authentication.enabled:true}")
+    private Boolean isAuthenticationEnabled;
 
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        if (isAuthenticationEnabled) { http.authorizeRequests().anyRequest().authenticated().and().httpBasic().and().csrf().disable(); }
+        else { http.authorizeRequests().anyRequest().permitAll(); }
+        return http.build();
+    }
 }

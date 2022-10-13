@@ -1,25 +1,26 @@
 package org.goafabric.personservice.persistence;
 
-import io.quarkus.runtime.Quarkus;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.goafabric.personservice.crossfunctional.HttpInterceptor;
 import org.goafabric.personservice.persistence.domain.AddressBo;
 import org.goafabric.personservice.persistence.domain.PersonBo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
-@ApplicationScoped
-@Transactional
+@Component
 @Slf4j
 public class DatabaseProvisioning {
-    @ConfigProperty(name = "database.provisioning.goals", defaultValue = " ")
+    @Value("${database.provisioning.goals:}")
     String goals;
 
-    @Inject
+    @Autowired
     PersonRepository personRepository;
+
+    @Autowired
+    ApplicationContext applicationContext;
 
     public void run() {
         if (goals.contains("-import-demo-data")) {
@@ -29,16 +30,17 @@ public class DatabaseProvisioning {
 
         if (goals.contains("-terminate")) {
             log.info("Terminating app ...");
-            Quarkus.asyncExit();
+            SpringApplication.exit(applicationContext, () -> 0); //if an exception is raised, spring will automatically terminate with 1
         }
     }
 
-    public void importDemoData() {
-        if (personRepository.findAll().list().isEmpty()) {
+    private void importDemoData() {
+        if (personRepository.findAll().isEmpty()) {
             HttpInterceptor.setTenantId("0");
             insertData();
             HttpInterceptor.setTenantId("5a2f");
-            insertData();        }
+            insertData();
+        }
     }
 
     private void insertData() {

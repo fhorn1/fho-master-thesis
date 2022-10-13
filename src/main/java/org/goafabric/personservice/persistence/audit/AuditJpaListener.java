@@ -1,52 +1,73 @@
 package org.goafabric.personservice.persistence.audit;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.NonNull;
 import org.goafabric.personservice.persistence.multitenancy.TenantAware;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.spi.CDI;
-import javax.inject.Inject;
 import javax.persistence.*;
-import javax.transaction.Transactional;
+import javax.sql.DataSource;
 
-/**
- * Specific Listener for JPA for Auditing
- *
- */
+public class AuditJpaListener implements ApplicationContextAware {
+    private static ApplicationContext context;
 
-@RegisterForReflection
-public class AuditJpaListener {
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        context = applicationContext;
+    }
 
     @PostLoad
     public void afterRead(Object object) {
-        CDI.current().select(AuditBean.class).get().afterRead(object, ((TenantAware) object).getId());
+        context.getBean(AuditBean.class).afterRead(object, ((TenantAware) object).getId());
     }
 
     @PostPersist
     public void afterCreate(Object object)  {
-        CDI.current().select(AuditBean.class).get().afterCreate(object, ((TenantAware) object).getId());
+        context.getBean(AuditBean.class).afterCreate(object, ((TenantAware) object).getId());
     }
 
     @PostUpdate
     public void afterUpdate(Object object) {
-        CDI.current().select(AuditBean.class).get().afterUpdate(object, ((TenantAware) object).getId(),
-                CDI.current().select(AuditJpaUpdater.class).get().findOldObject(object.getClass(), ((TenantAware) object).getId()));
+        context.getBean(AuditBean.class).afterUpdate(object, ((TenantAware) object).getId(),
+                context.getBean(AuditJpaUpdater.class).findOldObject(object.getClass(), ((TenantAware) object).getId()));
     }
 
     @PostRemove
     public void afterDelete(Object object) {
-        CDI.current().select(AuditBean.class).get().afterDelete(object, ((TenantAware) object).getId());
+        context.getBean(AuditBean.class).afterDelete(object, ((TenantAware) object).getId());
     }
     
-    @ApplicationScoped
+    @Component
     static class AuditJpaUpdater {
-        @Inject
-        private EntityManager entityManager;
+        @PersistenceContext private EntityManager entityManager;
 
-        @Transactional(value = Transactional.TxType.REQUIRES_NEW) //new transaction helps us to retrieve the old value still inside the db
+        @Transactional(propagation = Propagation.REQUIRES_NEW) //new transaction helps us to retrieve the old value still inside the db
         public <T> T findOldObject(Class<T> clazz, String id) {
             return entityManager.find(clazz, id);
         }
     }
 
+    @Component
+    static class AuditJpaInserter implements AuditBean.AuditInserter {
+        @Autowired
+        private DataSource dataSource;
+
+        public void insertAudit(AuditBean.AuditEvent auditEvent, Object object) { //we cannot use jpa because of the dynamic table name
+            new SimpleJdbcInsert(dataSource).withTableName(getTableName(object) + "_audit")
+                .execute(new BeanPropertySqlParameterSource(auditEvent));
+        }
+
+        private String getTableName(@NonNull Object object) {
+            return object.getClass().getSimpleName().replaceAll("Bo", "").toLowerCase();
+        }
+    }
 }
+
+

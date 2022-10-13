@@ -1,37 +1,41 @@
 package org.goafabric.personservice.crossfunctional;
 
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.nativex.hint.AotProxyHint;
+import org.springframework.nativex.hint.ProxyBits;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Priority;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@Priority(2020)
-@Interceptor
-@DurationLog
+/**
+ * This Aspect will be invoked around every method that is part of a {@link org.springframework.web.bind.annotation.RestController} annotated class. It will log the method's signature and duration of the call.
+ */
+@Component
+@Aspect
 @Slf4j
+@AotProxyHint(targetClass = org.goafabric.personservice.logic.PersonLogic.class, proxyFeatures = ProxyBits.IS_STATIC)
 public class DurationLogger {
-    @AroundInvoke
-    Object logInvocation(InvocationContext context) throws Exception {
+
+    @Around("execution(public * org.goafabric.personservice.logic.PersonLogic.*(..))")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         final long startTime = System.currentTimeMillis();
-        final Object ret;
         try {
-            ret = context.proceed();
+            return joinPoint.proceed();
         } finally {
-            log.info("{} took {}ms for user: {} , tenant: {}", toString(context.getMethod()),
-                    System.currentTimeMillis() - startTime, HttpInterceptor.getUserName(), HttpInterceptor.getTenantId());
+            final Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+            log.info("{} took {}ms for user: {} , tenant: {}", toString(method), System.currentTimeMillis() - startTime, HttpInterceptor.getUserName(), HttpInterceptor.getTenantId());
         }
-        return ret;
     }
 
     private String toString(final Method method) {
         final String parameterTypes = Arrays.stream(method.getParameterTypes())
-                .map(Class::getSimpleName)
-                .collect(Collectors.joining(","));
+                .map(Class::getSimpleName).collect(Collectors.joining(","));
         return String.format("%s.%s(%s)", method.getDeclaringClass().getSimpleName(),
                 method.getName(), parameterTypes);
     }

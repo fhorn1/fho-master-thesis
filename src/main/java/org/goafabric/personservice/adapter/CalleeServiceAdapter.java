@@ -1,30 +1,35 @@
 package org.goafabric.personservice.adapter;
 
-import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
-import org.eclipse.microprofile.faulttolerance.Timeout;
-import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
+import org.springframework.cloud.client.circuitbreaker.NoFallbackAvailableException;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+@Slf4j
+@Component
+public class CalleeServiceAdapter {
+    @Autowired
+    private RestTemplate restTemplate;
 
-@Path("/callees")
-@RegisterRestClient
-@Timeout
-@CircuitBreaker
-@RegisterClientHeaders(CalleeServiceConfiguration.class)
-public interface CalleeServiceAdapter {
-    @GET
-    @Path("sayMyName")
-    Callee sayMyName(@QueryParam("name") String name);
+    @Value("${adapter.calleeservice.url}")
+    private String url;
 
-    @GET
-    @Path("sayMyOtherName/{name}")
-    Callee sayMyOtherName(@PathParam("name") String name);
+    @Autowired
+    private CircuitBreakerFactory cbFactory;
 
-    @GET
-    @Path("setSleepTime")
-    Callee setSleepTime(@QueryParam("sleepTime") Long sleepTime);
+
+    public Callee sayMyName(String name) {
+        log.info("Calling CalleService ...");
+        final Callee callee =
+                cbFactory.create(this.getClass().getSimpleName()).run(() ->
+                restTemplate.getForObject(url + "/callees/sayMyName?name={name}", Callee.class, name),
+                (throwable) -> {
+                    throw new NoFallbackAvailableException(throwable.getMessage(), throwable);
+                });
+        log.info("got: " + callee);
+        return callee;
+    }
 }

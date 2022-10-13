@@ -3,6 +3,7 @@ package org.goafabric.personservice.persistence.domain;
 import lombok.*;
 import org.goafabric.personservice.persistence.multitenancy.TenantAware;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -12,15 +13,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "person")
+@Where(clause = TenantAware.TENANT_FILTER)
 public class PersonBo extends TenantAware {
     @Id
     @GeneratedValue(generator = "uuid") @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
-    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name")
     private String lastName;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -28,4 +28,6 @@ public class PersonBo extends TenantAware {
     @NonNull
     private AddressBo address;
 
+    @Version //optimistic locking
+    private Long version;
 }
