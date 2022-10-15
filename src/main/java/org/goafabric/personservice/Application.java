@@ -20,7 +20,8 @@ import org.springframework.nativex.hint.NativeHint;
         initialization = {
             @InitializationHint(types = {
                     org.flywaydb.core.internal.util.FeatureDetector.class,
-                    org.flywaydb.core.internal.logging.log4j2.Log4j2LogCreator.class
+                    org.flywaydb.core.internal.logging.log4j2.Log4j2LogCreator.class,
+                    org.flywaydb.core.internal.logging.buffered.BufferedLogCreator.class
             },
                     initTime = InitializationTime.BUILD)})
 public class Application {
