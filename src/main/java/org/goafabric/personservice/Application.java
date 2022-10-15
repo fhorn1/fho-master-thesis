@@ -6,6 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.nativex.hint.InitializationHint;
+import org.springframework.nativex.hint.InitializationTime;
+import org.springframework.nativex.hint.NativeHint;
 
 
 /**
@@ -13,6 +16,10 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication
+@NativeHint(trigger = org.flywaydb.core.Flyway.class,
+        initialization = {
+            @InitializationHint(types = {org.flywaydb.core.internal.util.FeatureDetector.class, org.flywaydb.core.internal.logging.buffered.BufferedLogCreator.class},
+                initTime = InitializationTime.BUILD)})
 public class Application {
 
     public static void main(String[] args){
