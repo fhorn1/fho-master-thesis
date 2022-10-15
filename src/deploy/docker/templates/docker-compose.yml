@@ -49,9 +49,9 @@ services:
       #log levels
       - logging.level.root=WARN
       - logging.level.org.springframework=INFO
-      - logging.level.org.goafabric=DEBUG
+      - logging.level.org.fho.master.thesis=DEBUG
       - logging.level.org.hibernate.SQL="INFO"
-      - logging.level.org.goafabric.personservice.persistence.audit="INFO"
+      - logging.level.org.fho.master.thesis.personservice.persistence.audit="INFO"
       #log file settings
       - logging.file.max-size=10MB
       - logging.file.name=/usr/share/logs/application.log

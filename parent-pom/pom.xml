@@ -65,7 +65,7 @@
         <!--   OWN   -->
 
         <!-- Docker Registry -->
-        <docker.registry>docker.io/goafabric</docker.registry>
+        <docker.registry>docker.io/fho.master.thesis</docker.registry>
 
         <!-- Sonarqube -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
