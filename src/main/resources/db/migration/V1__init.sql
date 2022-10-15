@@ -71,6 +71,8 @@ create table address_audit
     newvalue TEXT
 );
 
+drop table if exists sdops_head;
+
 create table sdops_head
 (
     id                           varchar primary key,
@@ -79,6 +81,8 @@ create table sdops_head
     internal_version             varchar not null,
     kbv_version                  varchar not null
 );
+
+drop table if exists sdops_code;
 
 create table sdops_code
 (
@@ -93,6 +97,9 @@ create table sdops_code
     category                   varchar,
     category_info              varchar
 );
+
+drop index if exists idx_sdops_code_head_and_op_code;
+drop index if exists idx_sdops_code_head_and_description;
 
 create index idx_sdops_code_head_and_op_code on sdops_code(head_id, op_code);
 create index idx_sdops_code_head_and_description on sdops_code(head_id, description);
