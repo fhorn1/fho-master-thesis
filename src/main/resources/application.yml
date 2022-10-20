@@ -31,7 +31,7 @@ spring.security.user.name: "admin"
 spring.security.user.password: "admin"
 
 #persistence
-spring.datasource.url: jdbc:postgresql://localhost:5432/opsdb
+spring.datasource.url: jdbc:postgresql://postgres:5432/opsdb
 spring.datasource.username: ops
 spring.datasource.password: ops
 
