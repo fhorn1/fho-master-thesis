@@ -31,9 +31,9 @@ spring.security.user.name: "admin"
 spring.security.user.password: "admin"
 
 #persistence
-spring.datasource.url: jdbc:postgresql://postgres:5432/opsdb
-spring.datasource.username: ops
-spring.datasource.password: ops
+spring.datasource.url: jdbc:postgresql://postgres:5432/postgres
+spring.datasource.username: postgres
+spring.datasource.password: postgres
 
 spring.datasource.hikari.maximum-pool-size: "10"
 spring.datasource.hikari.connection-timeout: "10000"
