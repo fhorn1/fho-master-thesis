@@ -7,14 +7,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container:
-      image: ops-service-spring-native:1.0.0-SNAPSHOT
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      ports:
-        - 8000:8000
-
     services:
       postgres:
         image: postgres:14.4
