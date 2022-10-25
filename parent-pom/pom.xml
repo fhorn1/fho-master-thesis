@@ -447,46 +447,6 @@
                                 </execution>
                             </executions>
                         </plugin>
-                        <plugin>
-                            <!-- workaround for missing publish functionality, see: https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image-example-publish -->
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>exec-maven-plugin</artifactId>
-                            <version>${exec-maven-plugin.version}</version>
-                            <executions>
-                                <execution>
-                                    <id>integrity</id>
-                                    <phase>integration-test</phase>
-                                    <goals>
-                                        <goal>exec</goal>
-                                    </goals>
-                                    <configuration>
-                                        <executable>docker</executable>
-                                        <arguments>
-                                            <argument>run</argument>
-                                            <argument>${spring.native.check.integrity.argument}</argument>
-                                            <argument>${project.artifactId}-native:${project.version}
-                                            </argument>
-                                            <argument>-check-integrity</argument>
-                                        </arguments>
-                                    </configuration>
-                                </execution>
-                                <execution>
-                                    <id>docker push</id>
-                                    <phase>deploy</phase>
-                                    <goals>
-                                        <goal>exec</goal>
-                                    </goals>
-                                    <configuration>
-                                        <executable>docker</executable>
-                                        <arguments>
-                                            <argument>push</argument>
-                                            <argument>${project.artifactId}-native:${project.version}
-                                            </argument>
-                                        </arguments>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
                     </plugins>
                 </pluginManagement>
             </build>
