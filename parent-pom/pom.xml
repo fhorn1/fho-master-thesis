@@ -65,7 +65,7 @@
         <!--   OWN   -->
 
         <!-- Docker Registry -->
-        <docker.registry>docker.io/fhorn/fho-master-thesis</docker.registry>
+        <docker.registry>fhorn/fho-master-thesis</docker.registry>
 
         <!-- Sonarqube -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -431,7 +431,7 @@
                                             </exclude>
                                         </excludes>
                                         <image>
-                                            <name>${docker.registry}/${project.artifactId}-native:${project.version}
+                                            <name>${docker.registry}:spring-native-${project.version}
                                             </name>
                                             <builder>paketobuildpacks/builder:base
                                             </builder> <!-- to get wget or curl we need build:full but this blows up the image to 700MB -->
@@ -463,7 +463,7 @@
                                         <executable>docker</executable>
                                         <arguments>
                                             <argument>push</argument>
-                                            <argument>${docker.registry}/${project.artifactId}-native:${project.version}
+                                            <argument>${docker.registry}:spring-native-${project.version}
                                             </argument>
                                         </arguments>
                                     </configuration>
