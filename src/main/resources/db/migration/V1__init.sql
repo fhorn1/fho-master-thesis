@@ -71,17 +71,6 @@ create table address_audit
     newvalue TEXT
 );
 
-drop table if exists sdops_head;
-
-create table sdops_head
-(
-    id                           varchar primary key,
-    start_date                   varchar not null,
-    end_date                     varchar not null,
-    internal_version             varchar not null,
-    kbv_version                  varchar not null
-);
-
 drop table if exists sdops_code;
 
 create table sdops_code
@@ -96,6 +85,17 @@ create table sdops_code
     side_location              boolean not null,
     category                   varchar,
     category_info              varchar
+);
+
+drop table if exists sdops_head;
+
+create table sdops_head
+(
+    id                           varchar primary key,
+    start_date                   varchar not null,
+    end_date                     varchar not null,
+    internal_version             varchar not null,
+    kbv_version                  varchar not null
 );
 
 drop index if exists idx_sdops_code_head_and_op_code;
