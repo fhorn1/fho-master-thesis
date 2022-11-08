@@ -247,7 +247,7 @@
 
                 <quarkus.container-image.push>false</quarkus.container-image.push>
                 <quarkus.container-image.build>true</quarkus.container-image.build>
-                <quarkus.container-image.image>${docker.registry}/${project.artifactId}-arm64v8:${project.version}</quarkus.container-image.image>
+                <quarkus.container-image.image>fhorn/fho-master-thesis:quarkus-native-1.0.0-SNAPSHOT</quarkus.container-image.image>
 
                 <quarkus.native.native-image-xmx>4096m</quarkus.native.native-image-xmx>
                 <quarkus.native.add-all-charsets>true</quarkus.native.add-all-charsets>
