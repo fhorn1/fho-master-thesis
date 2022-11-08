@@ -447,8 +447,7 @@
                                 </execution>
                             </executions>
                         </plugin>
-                        <plugin>
-                            <!-- workaround for missing publish functionality, see: https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image-example-publish -->
+                        <!-- <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>exec-maven-plugin</artifactId>
                             <version>${exec-maven-plugin.version}</version>
@@ -469,7 +468,7 @@
                                     </configuration>
                                 </execution>
                             </executions>
-                        </plugin>
+                        </plugin> -->
                     </plugins>
                 </pluginManagement>
             </build>
