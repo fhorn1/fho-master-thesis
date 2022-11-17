@@ -358,9 +358,9 @@
                                             </platforms>
                                         </from>
                                         <to>
-                                            <image>${project.artifactId}</image>
+                                            <image>${docker.registry}</image>
                                             <tags>
-                                                <tag>${project.version}</tag>
+                                                <tag>spring-${project.version}</tag>
                                             </tags>
                                         </to>
                                         <container>
