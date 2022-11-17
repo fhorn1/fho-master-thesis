@@ -19,6 +19,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-    - name: Build with Maven
-#      run: mvn -B clean verify --file pom.xml
+    - name: Build Image with Maven
+      run: mvn -B clean deploy -P docker-image --file pom.xml
+    - name: Build Native image with Maven
       run: mvn -B clean deploy -P docker-image-native --file pom.xml

@@ -377,6 +377,28 @@
                                 </execution>
                             </executions>
                         </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>exec-maven-plugin</artifactId>
+                            <version>${exec-maven-plugin.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>docker push</id>
+                                    <phase>deploy</phase>
+                                    <goals>
+                                        <goal>exec</goal>
+                                    </goals>
+                                    <configuration>
+                                        <executable>docker</executable>
+                                        <arguments>
+                                            <argument>push</argument>
+                                            <argument>${docker.registry}:spring-${project.version}
+                                            </argument>
+                                        </arguments>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
                     </plugins>
                 </pluginManagement>
             </build>
@@ -447,7 +469,7 @@
                                 </execution>
                             </executions>
                         </plugin>
-                        <!-- <plugin>
+                        <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>exec-maven-plugin</artifactId>
                             <version>${exec-maven-plugin.version}</version>
@@ -468,7 +490,7 @@
                                     </configuration>
                                 </execution>
                             </executions>
-                        </plugin> -->
+                        </plugin>
                     </plugins>
                 </pluginManagement>
             </build>
