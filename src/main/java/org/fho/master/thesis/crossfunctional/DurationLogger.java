@@ -6,8 +6,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.fho.master.thesis.logic.PersonLogic;
-import org.springframework.nativex.hint.AotProxyHint;
-import org.springframework.nativex.hint.ProxyBits;
+import org.springframework.aot.hint.MemberCategory;
+import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.aot.hint.RuntimeHintsRegistrar;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 @Component
 @Aspect
 @Slf4j
-@AotProxyHint(targetClass = PersonLogic.class, proxyFeatures = ProxyBits.IS_STATIC)
+@ImportRuntimeHints(DurationLogger.ApplicationRuntimeHints.class)
 public class DurationLogger {
 
     @Around("execution(public * org.fho.master.thesis.logic.PersonLogic.*(..))")
@@ -39,6 +41,13 @@ public class DurationLogger {
                 .map(Class::getSimpleName).collect(Collectors.joining(","));
         return String.format("%s.%s(%s)", method.getDeclaringClass().getSimpleName(),
                 method.getName(), parameterTypes);
+    }
+
+    static class ApplicationRuntimeHints implements RuntimeHintsRegistrar {
+        @Override
+        public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+            hints.reflection().registerType(DurationLogger.class, MemberCategory.INVOKE_DECLARED_METHODS);
+        }
     }
 
 }

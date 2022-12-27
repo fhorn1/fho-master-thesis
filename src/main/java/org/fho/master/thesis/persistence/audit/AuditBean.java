@@ -6,9 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.fho.master.thesis.crossfunctional.HttpInterceptor;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.nativex.hint.TypeAccess;
-import org.springframework.nativex.hint.TypeHint;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,7 +16,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 /** A class that audits all registered entities with @EntityListeners and writes the Audit Entries to the database **/
-@TypeHint(types = AuditBean.AuditEvent.class, access = {TypeAccess.DECLARED_CONSTRUCTORS, TypeAccess.PUBLIC_METHODS})
+@RegisterReflectionForBinding(AuditBean.AuditEvent.class)
 public class AuditBean {
     private enum DbOperation {
         CREATE, READ, UPDATE, DELETE

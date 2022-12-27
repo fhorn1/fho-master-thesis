@@ -1,5 +1,6 @@
 package org.fho.master.thesis.persistence.audit;
 
+import jakarta.persistence.*;
 import lombok.NonNull;
 import org.fho.master.thesis.persistence.multitenancy.TenantAware;
 import org.springframework.beans.BeansException;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
 import javax.sql.DataSource;
 
 public class AuditJpaListener implements ApplicationContextAware {
@@ -46,7 +46,8 @@ public class AuditJpaListener implements ApplicationContextAware {
     
     @Component
     static class AuditJpaUpdater {
-        @PersistenceContext private EntityManager entityManager;
+        @PersistenceContext
+        private EntityManager entityManager;
 
         @Transactional(propagation = Propagation.REQUIRES_NEW) //new transaction helps us to retrieve the old value still inside the db
         public <T> T findOldObject(Class<T> clazz, String id) {

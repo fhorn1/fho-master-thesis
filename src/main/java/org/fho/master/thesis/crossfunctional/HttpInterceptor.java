@@ -1,5 +1,7 @@
 package org.fho.master.thesis.crossfunctional;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +13,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @Configuration
 @Slf4j
 public class HttpInterceptor implements WebMvcConfigurer {
@@ -22,7 +21,7 @@ public class HttpInterceptor implements WebMvcConfigurer {
 
     public static String getTenantId() { return tenantId.get(); }
     public static String getUserName() { return userName.get(); }
-    public static void   setTenantId(String tenantId) { HttpInterceptor.tenantId.set(tenantId); }
+    public static void setTenantId(String tenantId) { HttpInterceptor.tenantId.set(tenantId); }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

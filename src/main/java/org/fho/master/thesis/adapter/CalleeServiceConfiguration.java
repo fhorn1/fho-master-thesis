@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.nativex.hint.TypeAccess;
-import org.springframework.nativex.hint.TypeHint;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -17,16 +15,14 @@ import java.util.Base64;
 import java.util.Collections;
 
 @Configuration
-@TypeHint(types = Callee.class, access = {TypeAccess.DECLARED_CONSTRUCTORS, TypeAccess.PUBLIC_METHODS})
-//@TypeHint(types = org.springframework.http.client.SimpleClientHttpRequestFactory.class, access = {TypeAccess.DECLARED_CONSTRUCTORS, TypeAccess.PUBLIC_METHODS})
 public class CalleeServiceConfiguration {
 
     @Bean
-    public RestTemplate restTemplate(
-            @Value("${adapter.calleeservice.user}") String user,
-            @Value("${adapter.calleeservice.password}") String password,
-            @Value("${adapter.timeout}") Integer timeout) {
-        final RestTemplate restTemplate = new RestTemplateBuilder()
+    public RestTemplate restTemplate(RestTemplateBuilder builder,
+                                     @Value("${adapter.calleeservice.user}") String user,
+                                     @Value("${adapter.calleeservice.password}") String password,
+                                     @Value("${adapter.timeout}") Integer timeout) {
+        RestTemplate restTemplate = builder
                 .setConnectTimeout(Duration.ofMillis(timeout))
                 .setReadTimeout(Duration.ofMillis(timeout))
                 .build();

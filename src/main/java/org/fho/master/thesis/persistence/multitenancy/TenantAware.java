@@ -3,10 +3,10 @@ package org.fho.master.thesis.persistence.multitenancy;
 import org.fho.master.thesis.crossfunctional.HttpInterceptor;
 import org.fho.master.thesis.persistence.audit.AuditJpaListener;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @EntityListeners(AuditJpaListener.class)
