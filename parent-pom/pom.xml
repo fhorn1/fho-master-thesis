@@ -433,7 +433,7 @@
                                         <arguments>
                                             <argument>push</argument>
                                             <argument>
-                                                ${docker.registry}:spring-native-v3{arch.suffix}-${project.version}
+                                                ${docker.registry}:spring-native-v3-${project.version}
                                             </argument>
                                         </arguments>
                                     </configuration>
