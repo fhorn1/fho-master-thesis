@@ -23,4 +23,4 @@ jobs:
       - name: Multiarch Image
         run: mvn -B clean deploy -P docker-image --file pom.xml
       - name: Native Image
-        run: mvn -B clean deploy -P docker-image-native --file pom.xml
+        run: mvn -B clean deploy -P docker-image-native,set-architecture-arm64 --file pom.xml
