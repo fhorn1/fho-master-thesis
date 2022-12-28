@@ -2,11 +2,13 @@ package org.fho.master.thesis.persistence.multitenancy;
 
 import org.fho.master.thesis.crossfunctional.HttpInterceptor;
 import org.hibernate.resource.jdbc.spi.StatementInspector;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
+@RegisterReflectionForBinding(TenantInspector.class)
 public class TenantInspector implements StatementInspector {
     @Override
     public String inspect(String sql) {
